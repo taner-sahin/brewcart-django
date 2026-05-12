@@ -1,0 +1,38 @@
+/* ========================= */
+/* HERO BANNER */
+/* ========================= */
+
+.brew-hero {
+
+    min-height: 490px;
+
+    border-radius: 18px;
+
+    background-image: url("../img/brewcart-hero.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+}
+/* HERO YAZI ALANI */
+.brew-hero-content {
+    max-width: 520px;
+    color: white;
+}
+
+/* HERO BAŞLIK */
+.brew-hero-content h1 {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+/* HERO AÇIKLAMA */
+.brew-hero-content p {
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
