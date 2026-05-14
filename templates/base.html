@@ -78,20 +78,9 @@
       style="background-color: #e0c097"
     >
       <div class="navbar-nav">
-        <!-- Şimdilik statik -->
-        <!-- Sonra admin panelden dinamik gelecek -->
-
-        <a class="nav-link" href="#"> Coffee Beans </a>
-
-        <a class="nav-link" href="#"> Espresso </a>
-
-        <a class="nav-link" href="#"> Filter Coffee </a>
-
-        <a class="nav-link" href="#"> Cold Brew </a>
-
-        <a class="nav-link" href="#"> Equipment </a>
-
-        <a class="nav-link" href="#"> Mugs </a>
+        {% for category in nav_categories %}
+        <a href="#" class="nav-link"> {{ category.name }} </a>
+        {% endfor %}
       </div>
     </nav>
 

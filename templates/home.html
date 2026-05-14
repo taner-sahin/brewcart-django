@@ -1,34 +1,90 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <!-- HERO BANNER BAŞLANGIÇ -->
-<section class="brew-hero mb-5">
-
-   
-</section>
+<section class="brew-hero mb-5"></section>
 <!-- HERO BANNER BİTİŞ -->
+<!-- CATEGORY SECTION BAŞLANGIÇ -->
+<section class="categories-section py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Explore BrewCart Categories</h2>
 
-
-<h2 class="mb-4">
-    Featured Products
-</h2>
-
-<div class="row">
-
-    <!-- PRODUCT CARD 1 -->
-    <div class="col-md-3 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5>Colombia Supremo</h5>
-                <p>450 TL</p>
-                <p>Stock: 12</p>
-                <a href="#" class="btn btn-dark">Detail</a>
-            </div>
-        </div>
+      <p class="text-muted">
+        Discover premium coffee beans, brewing equipment and specialty coffee
+        essentials.
+      </p>
     </div>
 
-</div>
+    <div class="row">
+      {% for category in categories %}
+
+      <div class="col-md-3 mb-4">
+        <div class="card h-100">
+          {% if category.image %}
+          <img
+            src="{{ category.image.url }}"
+            class="card-img-top"
+            alt="{{ category.name }}"
+          />
+          {% endif %}
+
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ category.name }}</h5>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+
+      <div class="col-12">
+        <p class="text-center">Henüz kategori yok.</p>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- CATEGORY SECTION BİTİŞ -->
+
+<!-- FEATURED PRODUCTS BAŞLANGIÇ -->
+<section class="featured-products py-5">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2>Featured Coffee</h2>
+      <p>Discover our selected specialty coffee products.</p>
+    </div>
+
+    <div class="row">
+      {% for product in featured_products %}
+
+      <div class="col-md-3 mb-4">
+        <div class="card h-100">
+          {% if product.image %}
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            alt="{{ product.name }}"
+          />
+          {% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatewords:12 }}</p>
+            <p class="fw-bold">{{ product.price }} ₺</p>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+
+      <div class="col-12">
+        <p class="text-center">Henüz öne çıkan ürün yok.</p>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- FEATURED PRODUCTS BİTİŞ -->
 
 {% endblock %}
