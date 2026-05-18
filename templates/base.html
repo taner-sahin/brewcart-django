@@ -27,7 +27,7 @@
       style="background-color: #5c3d2e"
     >
       <!-- Logo -->
-      <a class="navbar-brand fw-bold" href="#"> BrewCart </a>
+      <a class="navbar-brand fw-bold" href="{% url 'products:home' %}"> BrewCart </a>
 
       <!-- Search Form -->
       <form class="d-flex mx-auto w-50">
@@ -79,7 +79,7 @@
     >
       <div class="navbar-nav">
         {% for category in nav_categories %}
-        <a href="{% url 'category_products' category.slug %}" class="nav-link">
+        <a href="{% url 'products:category_products' category.slug %}" class="nav-link">
           {{ category.name }}
         </a>
         {% endfor %}

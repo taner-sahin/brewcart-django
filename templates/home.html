@@ -30,7 +30,7 @@
         <!-- Kategori kartını tıklanabilir yapıyoruz. -->
         <!-- category.slug ile /category/coffee-beans/ gibi URL oluşur. -->
         <a
-          href="{% url 'category_products' category.slug %}"
+          href="{% url 'products:category_products' category.slug %}"
           class="text-decoration-none text-dark"
         >
           <div class="card h-100">
@@ -108,7 +108,7 @@
 
                          gibi URL oluşur.
                     -->
-                    <a href="{% url 'product_detail' product.slug %}"
+                    <a href="{% url 'products:product_detail' product.slug %}"
                        class="text-decoration-none text-dark">
 
                         <!-- Ürün kartı -->
