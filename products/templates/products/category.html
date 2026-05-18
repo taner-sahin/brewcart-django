@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="category-products py-5">
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h2>{{ category.name }}</h2>
+            <p>Explore all products in this category.</p>
+        </div>
+
+        <div class="row">
+
+            {% for product in products %}
+
+                <div class="col-md-3 mb-4">
+
+                    <a href="{% url 'product_detail' product.slug %}"
+                       class="text-decoration-none text-dark">
+
+                        <div class="card h-100">
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}"
+                                     class="card-img-top"
+                                     alt="{{ product.name }}">
+                            {% endif %}
+
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{ product.name }}
+                                </h5>
+
+                                <p class="card-text">
+                                    {{ product.description|truncatewords:12 }}
+                                </p>
+
+                                <p class="fw-bold">
+                                    {{ product.price }} ₺
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12">
+                    <p class="text-center">
+                        Bu kategoride henüz ürün yok.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

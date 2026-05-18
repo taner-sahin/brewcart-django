@@ -1,11 +1,15 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 
 <!-- HERO BANNER BAŞLANGIÇ -->
+<!-- Bu alan ana sayfadaki büyük görsel/banner bölümüdür. -->
 <section class="brew-hero mb-5"></section>
 <!-- HERO BANNER BİTİŞ -->
+
 <!-- CATEGORY SECTION BAŞLANGIÇ -->
+<!-- Amaç: Admin panelden eklediğimiz kategorileri ana sayfada kart olarak göstermek. -->
 <section class="categories-section py-5">
   <div class="container">
+    <!-- Kategori bölüm başlığı -->
     <div class="text-center mb-5">
       <h2 class="fw-bold">Explore BrewCart Categories</h2>
 
@@ -15,27 +19,41 @@
       </p>
     </div>
 
+    <!-- Bootstrap row: Kartları satır düzenine sokar. -->
     <div class="row">
+      <!-- categories, views.py içinden home.html sayfasına gönderildi. -->
+      <!-- Bu döngü veritabanındaki kategorileri tek tek dolaşır. -->
       {% for category in categories %}
 
+      <!-- Her kategori 4'lü grid sisteminde bir kart olarak görünür. -->
       <div class="col-md-3 mb-4">
-        <div class="card h-100">
-          {% if category.image %}
-          <img
-            src="{{ category.image.url }}"
-            class="card-img-top"
-            alt="{{ category.name }}"
-          />
-          {% endif %}
+        <!-- Kategori kartını tıklanabilir yapıyoruz. -->
+        <!-- category.slug ile /category/coffee-beans/ gibi URL oluşur. -->
+        <a
+          href="{% url 'category_products' category.slug %}"
+          class="text-decoration-none text-dark"
+        >
+          <div class="card h-100">
+            <!-- Eğer kategorinin görseli varsa göster. -->
+            {% if category.image %}
+            <img
+              src="{{ category.image.url }}"
+              class="card-img-top"
+              alt="{{ category.name }}"
+            />
+            {% endif %}
 
-          <div class="card-body text-center">
-            <h5 class="card-title">{{ category.name }}</h5>
+            <!-- Kategori adı -->
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ category.name }}</h5>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
 
       {% empty %}
 
+      <!-- Eğer hiç kategori yoksa bu mesaj görünür. -->
       <div class="col-12">
         <p class="text-center">Henüz kategori yok.</p>
       </div>
@@ -47,44 +65,114 @@
 <!-- CATEGORY SECTION BİTİŞ -->
 
 <!-- FEATURED PRODUCTS BAŞLANGIÇ -->
+<!-- Amaç:
+     Admin panelde is_featured=True olan ürünleri
+     ana sayfada dinamik olarak göstermek.
+-->
 <section class="featured-products py-5">
-  <div class="container">
-    <div class="text-center mb-4">
-      <h2>Featured Coffee</h2>
-      <p>Discover our selected specialty coffee products.</p>
-    </div>
 
-    <div class="row">
-      {% for product in featured_products %}
+    <div class="container">
 
-      <div class="col-md-3 mb-4">
-        <div class="card h-100">
-          {% if product.image %}
-          <img
-            src="{{ product.image.url }}"
-            class="card-img-top"
-            alt="{{ product.name }}"
-          />
-          {% endif %}
+        <!-- Bölüm başlığı -->
+        <div class="text-center mb-4">
 
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description|truncatewords:12 }}</p>
-            <p class="fw-bold">{{ product.price }} ₺</p>
-          </div>
+            <h2 class="fw-bold">
+                Featured Coffee
+            </h2>
+
+            <p class="text-muted">
+                Discover our selected specialty coffee products.
+            </p>
+
         </div>
-      </div>
 
-      {% empty %}
+        <!-- Bootstrap row:
+             Kartları satır düzenine sokar.
+        -->
+        <div class="row">
 
-      <div class="col-12">
-        <p class="text-center">Henüz öne çıkan ürün yok.</p>
-      </div>
+            <!-- featured_products:
+                 views.py içinden gelen queryset'tir.
 
-      {% endfor %}
+                 Bu döngü ürünleri tek tek dolaşır.
+            -->
+            {% for product in featured_products %}
+
+                <!-- Her ürün Bootstrap grid içinde yer alır. -->
+                <div class="col-md-3 mb-4">
+
+                    <!-- Ürün kartını tıklanabilir yapıyoruz.
+                         product.slug ile:
+
+                         /product/ethiopia-yirgacheffe/
+
+                         gibi URL oluşur.
+                    -->
+                    <a href="{% url 'product_detail' product.slug %}"
+                       class="text-decoration-none text-dark">
+
+                        <!-- Ürün kartı -->
+                        <div class="card h-100">
+
+                            <!-- Eğer ürün görseli varsa göster -->
+                            {% if product.image %}
+
+                                <img
+                                    src="{{ product.image.url }}"
+                                    class="card-img-top"
+                                    alt="{{ product.name }}"
+                                >
+
+                            {% endif %}
+
+                            <!-- Ürün bilgileri -->
+                            <div class="card-body">
+
+                                <!-- Ürün adı -->
+                                <h5 class="card-title">
+                                    {{ product.name }}
+                                </h5>
+
+                                <!-- Ürün açıklaması -->
+                                <p class="card-text">
+
+                                    <!-- truncatewords:12
+                                         açıklamayı 12 kelimeye düşürür.
+                                    -->
+                                    {{ product.description|truncatewords:12 }}
+
+                                </p>
+
+                                <!-- Ürün fiyatı -->
+                                <p class="fw-bold">
+                                    {{ product.price }} ₺
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            {% empty %}
+
+                <!-- Eğer featured ürün yoksa bu mesaj görünür -->
+                <div class="col-12">
+
+                    <p class="text-center">
+                        Henüz öne çıkan ürün yok.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
     </div>
-  </div>
+
 </section>
 <!-- FEATURED PRODUCTS BİTİŞ -->
-
 {% endblock %}

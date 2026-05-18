@@ -79,7 +79,9 @@
     >
       <div class="navbar-nav">
         {% for category in nav_categories %}
-        <a href="#" class="nav-link"> {{ category.name }} </a>
+        <a href="{% url 'category_products' category.slug %}" class="nav-link">
+          {{ category.name }}
+        </a>
         {% endfor %}
       </div>
     </nav>
