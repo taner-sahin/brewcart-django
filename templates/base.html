@@ -5,7 +5,8 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- Sayfa Başlığı -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>BrewCart</title>
 
     <!-- Bootstrap CDN -->
@@ -17,6 +18,7 @@
     <!-- CSS Dosyası -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
+
   <body>
     <!-- ========================= -->
     <!-- TOP NAVBAR BAŞLANGIÇ -->
@@ -27,7 +29,9 @@
       style="background-color: #5c3d2e"
     >
       <!-- Logo -->
-      <a class="navbar-brand fw-bold" href="{% url 'products:home' %}"> BrewCart </a>
+      <a class="navbar-brand fw-bold" href="{% url 'products:home' %}">
+        BrewCart
+      </a>
 
       <!-- Search Form -->
       <form class="d-flex mx-auto w-50">
@@ -37,16 +41,23 @@
           placeholder="Kahve ara..."
         />
 
-        <button class="btn btn-light">Ara</button>
+        <button class="btn btn-light" type="submit">
+          Ara
+        </button>
       </form>
 
       <!-- Sağ Menü -->
-      <div>
+      <div class="d-flex align-items-center gap-2">
         {% if user.is_authenticated %}
 
-        <span class="text-white me-2"> {{ user.username }} </span>
+        <span class="text-white fw-semibold">
+          {{ user.username }}
+        </span>
 
-        <a href="{% url 'accounts:logout' %}" class="btn btn-light btn-sm">
+        <a
+          href="{% url 'accounts:logout' %}"
+          class="btn btn-light btn-sm"
+        >
           Çıkış
         </a>
 
@@ -59,18 +70,27 @@
           Giriş
         </a>
 
-        <a href="{% url 'accounts:register' %}" class="btn btn-light btn-sm">
+        <a
+          href="{% url 'accounts:register' %}"
+          class="btn btn-light btn-sm"
+        >
           Kayıt
         </a>
 
         {% endif %}
 
-        <a href="#" class="btn btn-outline-light btn-sm"> Sepet </a>
+        <a
+          href="{% url 'cart:cart_detail' %}"
+          class="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+        >
+          <span>🛒</span>
+          <span>Cart ({{ cart_count }})</span>
+        </a>
       </div>
     </nav>
 
     <!-- ========================= -->
-    <!-- CATEGORY NAVBAR -->
+    <!-- CATEGORY NAVBAR BAŞLANGIÇ -->
     <!-- ========================= -->
 
     <nav
@@ -79,9 +99,14 @@
     >
       <div class="navbar-nav">
         {% for category in nav_categories %}
-        <a href="{% url 'products:category_products' category.slug %}" class="nav-link">
+
+        <a
+          href="{% url 'products:category_products' category.slug %}"
+          class="nav-link"
+        >
           {{ category.name }}
         </a>
+
         {% endfor %}
       </div>
     </nav>
@@ -90,7 +115,10 @@
     <!-- ANA İÇERİK -->
     <!-- ========================= -->
 
-    <div class="container mt-5">{% block content %} {% endblock %}</div>
+    <main class="container mt-5">
+      {% block content %}
+      {% endblock %}
+    </main>
 
     <!-- ========================= -->
     <!-- FOOTER -->
@@ -100,7 +128,14 @@
       class="text-center mt-5 p-4"
       style="background-color: #2d2424; color: white"
     >
-      <p class="mb-0">BrewCart | Backend Focused Django Project</p>
+      <p class="mb-0">
+        BrewCart | Backend Focused Django Project
+      </p>
     </footer>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
   </body>
 </html>

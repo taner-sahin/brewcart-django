@@ -2,105 +2,216 @@
 
 {% block content %}
 
-<!-- CART DETAIL BAŞLANGIÇ -->
+<!-- ======================================== -->
+<!-- CART DETAIL PAGE BAŞLANGIÇ -->
+<!-- ======================================== -->
+
 <section class="cart-detail py-5">
 
-    <div class="container">
+  <div class="container">
 
-        <!-- Başlık -->
-        <div class="text-center mb-5">
+    <!-- ======================================== -->
+    <!-- SAYFA BAŞLIĞI -->
+    <!-- ======================================== -->
 
-            <h2 class="fw-bold">
-                Your Cart
-            </h2>
+    <div class="text-center mb-5">
 
-            <p class="text-muted">
-                Review your selected BrewCart products.
-            </p>
+      <h2 class="fw-bold">
+        Your Cart
+      </h2>
 
-        </div>
-
-        <div class="row">
-
-            <div class="col-lg-8">
-
-                {% for item in cart_items %}
-
-                    <div class="card mb-4">
-
-                        <div class="row g-0 align-items-center">
-
-                            <!-- Ürün görseli -->
-                            <div class="col-md-4">
-
-                                {% if item.product.image %}
-
-                                    <img
-                                        src="{{ item.product.image.url }}"
-                                        class="img-fluid rounded-start"
-                                        alt="{{ item.product.name }}"
-                                    >
-
-                                {% endif %}
-
-                            </div>
-
-                            <!-- Ürün bilgileri -->
-                            <div class="col-md-8">
-
-                                <div class="card-body">
-
-                                    <h5 class="card-title">
-                                        {{ item.product.name }}
-                                    </h5>
-
-                                    <p>
-                                        Quantity:
-                                        {{ item.quantity }}
-                                    </p>
-
-                                    <p class="fw-bold">
-                                        {{ item.subtotal }} ₺
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                {% empty %}
-
-                    <p>Your cart is empty.</p>
-
-                {% endfor %}
-
-            </div>
-
-            <!-- Total -->
-            <div class="col-lg-4">
-
-                <div class="card p-4">
-
-                    <h4 class="mb-3">
-                        Cart Total
-                    </h4>
-
-                    <h3 class="fw-bold">
-                        {{ total_price }} ₺
-                    </h3>
-
-                </div>
-
-            </div>
-
-        </div>
+      <p class="text-muted">
+        Review your selected BrewCart products.
+      </p>
 
     </div>
 
+    <div class="row">
+
+      <!-- ======================================== -->
+      <!-- CART ITEMS ALANI -->
+      <!-- ======================================== -->
+
+      <div class="col-lg-8">
+
+        <!-- cart_items döngüsü başlıyor -->
+        {% for item in cart_items %}
+
+        <!-- ======================================== -->
+        <!-- TEK CART ITEM KARTI -->
+        <!-- ======================================== -->
+
+        <div class="card mb-4">
+
+          <div class="row g-0 align-items-center">
+
+            <!-- ======================================== -->
+            <!-- ÜRÜN GÖRSELİ -->
+            <!-- ======================================== -->
+
+            <div class="col-md-4">
+
+              <!-- ürün görseli varsa göster -->
+              {% if item.product.image %}
+
+              <img
+                src="{{ item.product.image.url }}"
+                class="img-fluid rounded-start"
+                alt="{{ item.product.name }}"
+              />
+
+              {% endif %}
+
+            </div>
+
+            <!-- ======================================== -->
+            <!-- ÜRÜN BİLGİLERİ -->
+            <!-- ======================================== -->
+
+            <div class="col-md-8">
+
+              <div class="card-body">
+
+                <!-- ürün adı -->
+                <h5 class="card-title">
+                  {{ item.product.name }}
+                </h5>
+
+                <!-- ürün birim fiyatı -->
+                <p class="text-muted mb-2">
+                  Unit Price: {{ item.product.price }} ₺
+                </p>
+
+                <!-- ======================================== -->
+                <!-- QUANTITY CONTROL -->
+                <!-- (adet kontrol sistemi) -->
+                <!-- ======================================== -->
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+
+                  <!-- quantity yazısı -->
+                  <span class="fw-bold">
+                    Quantity:
+                  </span>
+
+                  <!-- ======================================== -->
+                  <!-- DECREASE BUTTON -->
+                  <!-- (adet azaltma butonu) -->
+                  <!-- ======================================== -->
+
+                  <a
+                    href="{% url 'cart:decrease_quantity' item.id %}"
+                    class="btn btn-outline-dark btn-sm"
+                  >
+                    -
+                  </a>
+
+                  <!-- mevcut quantity -->
+                  <span class="fw-bold">
+                    {{ item.quantity }}
+                  </span>
+
+                  <!-- ======================================== -->
+                  <!-- INCREASE BUTTON -->
+                  <!-- (adet artırma butonu) -->
+                  <!-- ======================================== -->
+
+                  <a
+                    href="{% url 'cart:increase_quantity' item.id %}"
+                    class="btn btn-dark btn-sm"
+                  >
+                    +
+                  </a>
+
+                  <!-- ======================================== -->
+                  <!-- REMOVE BUTTON -->
+                  <!-- (ürünü tamamen silme) -->
+                  <!-- ======================================== -->
+
+                  <a
+                    href="{% url 'cart:remove_item' item.id %}"
+                    class="btn btn-danger btn-sm"
+                  >
+                    Remove
+                  </a>
+
+                </div>
+
+                <!-- ======================================== -->
+                <!-- STOCK WARNING -->
+                <!-- (stok sınırı uyarısı) -->
+                <!-- ======================================== -->
+
+                {% if item.quantity >= item.product.stock %}
+
+                <p class="text-danger small mb-3">
+                  You cannot add more than available stock.
+                </p>
+
+                {% endif %}
+
+                <!-- ======================================== -->
+                <!-- SUBTOTAL -->
+                <!-- (ara toplam) -->
+                <!-- ======================================== -->
+
+                <p class="fw-bold mb-0">
+                  Subtotal: {{ item.subtotal }} ₺
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ======================================== -->
+        <!-- SEPET BOŞSA -->
+        <!-- ======================================== -->
+
+        {% empty %}
+
+        <div class="alert alert-warning">
+
+          Your cart is empty.
+
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+      <!-- ======================================== -->
+      <!-- CART TOTAL -->
+      <!-- (genel sepet toplamı) -->
+      <!-- ======================================== -->
+
+      <div class="col-lg-4">
+
+        <div class="card p-4">
+
+          <h4 class="mb-3">
+            Cart Total
+          </h4>
+
+          <h3 class="fw-bold">
+            {{ total_price }} ₺
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
-<!-- CART DETAIL BİTİŞ -->
+
+<!-- ======================================== -->
+<!-- CART DETAIL PAGE BİTİŞ -->
+<!-- ======================================== -->
 
 {% endblock %}

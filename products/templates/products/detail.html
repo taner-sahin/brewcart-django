@@ -1,11 +1,23 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
-<!-- PRODUCT DETAIL BAŞLANGIÇ -->
+{% block content %}
+
+<!-- ======================================== -->
+<!-- PRODUCT DETAIL PAGE BAŞLANGIÇ -->
+<!-- ======================================== -->
+
 <section class="product-detail py-5">
+
   <div class="container">
+
     <div class="row align-items-center">
-      <!-- Ürün görsel alanı -->
+
+      <!-- ======================================== -->
+      <!-- ÜRÜN GÖRSEL ALANI -->
+      <!-- ======================================== -->
+
       <div class="col-md-6 mb-4">
+
         {% if product.image %}
 
         <img
@@ -15,46 +27,89 @@
         />
 
         {% endif %}
+
       </div>
 
-      <!-- Ürün bilgi alanı -->
+      <!-- ======================================== -->
+      <!-- ÜRÜN BİLGİ ALANI -->
+      <!-- ======================================== -->
+
       <div class="col-md-6">
+
         <!-- Ürün adı -->
-        <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+        <h2 class="fw-bold mb-3">
+          {{ product.name }}
+        </h2>
 
         <!-- Kategori -->
-        <p class="text-muted">Category: {{ product.category.name }}</p>
+        <p class="text-muted">
+          Category: {{ product.category.name }}
+        </p>
 
         <!-- Açıklama -->
-        <p class="mb-4">{{ product.description }}</p>
+        <p class="mb-4">
+          {{ product.description }}
+        </p>
 
         <!-- Fiyat -->
-        <h3 class="fw-bold mb-3">{{ product.price }} ₺</h3>
+        <h3 class="fw-bold mb-3">
+          {{ product.price }} ₺
+        </h3>
 
-        <!-- Stok -->
-        <p>Stock: {{ product.stock }}</p>
+        <!-- Stok bilgisi -->
+        <p>
+          Stock: {{ product.stock }}
+        </p>
 
-        <!-- Availability -->
-        {% if product.is_available %}
+        <!-- ======================================== -->
+        <!-- AVAILABILITY -->
+        <!-- (ürün satışta mı / stokta mı bilgisi) -->
+        <!-- ======================================== -->
 
-        <p class="text-success fw-bold">In Stock</p>
+        {% if product.stock > 0 and product.is_available %}
+
+        <p class="text-success fw-bold">
+          In Stock
+        </p>
+
+        <!-- ======================================== -->
+        <!-- ADD TO CART BUTTON -->
+        <!-- (sepete ekleme butonu) -->
+        <!-- ======================================== -->
+
+        <a
+          href="{% url 'cart:add_to_cart' product.id %}"
+          class="btn btn-dark"
+        >
+          Add to Cart - Sepete Ekle
+        </a>
 
         {% else %}
 
-        <p class="text-danger fw-bold">Out of Stock</p>
+        <p class="text-danger fw-bold">
+          Out of Stock
+        </p>
+
+        <button class="btn btn-secondary" disabled>
+          Out of Stock
+        </button>
+
+        <p class="text-danger mt-2">
+          This product is currently out of stock.
+        </p>
 
         {% endif %}
 
-        <!-- Add to Cart -->
-        <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
-          {% csrf_token %}
-
-          <button type="submit" class="btn btn-dark mt-3">Add to Cart - Sepete Ekle</button>
-        </form>
       </div>
+
     </div>
+
   </div>
+
 </section>
-<!-- PRODUCT DETAIL BİTİŞ -->
+
+<!-- ======================================== -->
+<!-- PRODUCT DETAIL PAGE BİTİŞ -->
+<!-- ======================================== -->
 
 {% endblock %}
