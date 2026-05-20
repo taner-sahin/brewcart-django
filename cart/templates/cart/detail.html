@@ -1,39 +1,27 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <!-- ======================================== -->
 <!-- CART DETAIL PAGE BAŞLANGIÇ -->
 <!-- ======================================== -->
 
 <section class="cart-detail py-5">
-
   <div class="container">
-
     <!-- ======================================== -->
     <!-- SAYFA BAŞLIĞI -->
     <!-- ======================================== -->
 
     <div class="text-center mb-5">
+      <h2 class="fw-bold">Your Cart</h2>
 
-      <h2 class="fw-bold">
-        Your Cart
-      </h2>
-
-      <p class="text-muted">
-        Review your selected BrewCart products.
-      </p>
-
+      <p class="text-muted">Review your selected BrewCart products.</p>
     </div>
 
     <div class="row">
-
       <!-- ======================================== -->
       <!-- CART ITEMS ALANI -->
       <!-- ======================================== -->
 
       <div class="col-lg-8">
-
         <!-- cart_items döngüsü başlıyor -->
         {% for item in cart_items %}
 
@@ -42,15 +30,12 @@
         <!-- ======================================== -->
 
         <div class="card mb-4">
-
           <div class="row g-0 align-items-center">
-
             <!-- ======================================== -->
             <!-- ÜRÜN GÖRSELİ -->
             <!-- ======================================== -->
 
             <div class="col-md-4">
-
               <!-- ürün görseli varsa göster -->
               {% if item.product.image %}
 
@@ -61,7 +46,6 @@
               />
 
               {% endif %}
-
             </div>
 
             <!-- ======================================== -->
@@ -69,13 +53,9 @@
             <!-- ======================================== -->
 
             <div class="col-md-8">
-
               <div class="card-body">
-
                 <!-- ürün adı -->
-                <h5 class="card-title">
-                  {{ item.product.name }}
-                </h5>
+                <h5 class="card-title">{{ item.product.name }}</h5>
 
                 <!-- ürün birim fiyatı -->
                 <p class="text-muted mb-2">
@@ -88,11 +68,8 @@
                 <!-- ======================================== -->
 
                 <div class="d-flex align-items-center gap-2 mb-2">
-
                   <!-- quantity yazısı -->
-                  <span class="fw-bold">
-                    Quantity:
-                  </span>
+                  <span class="fw-bold"> Quantity: </span>
 
                   <!-- ======================================== -->
                   <!-- DECREASE BUTTON -->
@@ -107,9 +84,7 @@
                   </a>
 
                   <!-- mevcut quantity -->
-                  <span class="fw-bold">
-                    {{ item.quantity }}
-                  </span>
+                  <span class="fw-bold"> {{ item.quantity }} </span>
 
                   <!-- ======================================== -->
                   <!-- INCREASE BUTTON -->
@@ -134,7 +109,6 @@
                   >
                     Remove
                   </a>
-
                 </div>
 
                 <!-- ======================================== -->
@@ -155,16 +129,10 @@
                 <!-- (ara toplam) -->
                 <!-- ======================================== -->
 
-                <p class="fw-bold mb-0">
-                  Subtotal: {{ item.subtotal }} ₺
-                </p>
-
+                <p class="fw-bold mb-0">Subtotal: {{ item.subtotal }} ₺</p>
               </div>
-
             </div>
-
           </div>
-
         </div>
 
         <!-- ======================================== -->
@@ -173,14 +141,9 @@
 
         {% empty %}
 
-        <div class="alert alert-warning">
-
-          Your cart is empty.
-
-        </div>
+        <div class="alert alert-warning">Your cart is empty.</div>
 
         {% endfor %}
-
       </div>
 
       <!-- ======================================== -->
@@ -189,25 +152,17 @@
       <!-- ======================================== -->
 
       <div class="col-lg-4">
-
         <div class="card p-4">
+          <h4 class="mb-3">Cart Total</h4>
 
-          <h4 class="mb-3">
-            Cart Total
-          </h4>
-
-          <h3 class="fw-bold">
-            {{ total_price }} ₺
-          </h3>
-
+          <h3 class="fw-bold">{{ total_price }} ₺</h3>
+          <a href="{% url 'orders:checkout' %}" class="btn btn-success">
+            Siparişi Tamamla
+          </a>
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
 
 <!-- ======================================== -->
