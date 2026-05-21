@@ -3,18 +3,48 @@ from .models import Product, Category
 
 
 def home(request):
+
+    # URL'den gelen arama kelimesini alıyoruz.
+    #
+    # Örnek:
+    #
+    # /?q=espresso
+    #
+    # Buradaki:
+    #
+    # q = espresso
+    #
+    query = request.GET.get("q")
+
+    # İlk başta:
+    #
+    # aktif VE featured ürünleri getiriyoruz.
+    #
     featured_products = Product.objects.filter(
         is_available=True,
         is_featured=True
     )
 
+    # Eğer kullanıcı arama yaptıysa:
+    #
+    # ürün adında geçen kelimeyi filtrele.
+    #
+    if query:
+        featured_products = featured_products.filter(
+            name__icontains=query
+        )
+
+    # Bütün kategorileri getiriyoruz.
     categories = Category.objects.all()
 
+    # Python verilerini HTML'e gönderiyoruz.
     context = {
         "featured_products": featured_products,
         "categories": categories,
+        "query": query,
     }
 
+    # home.html sayfasını render ediyoruz.
     return render(request, "home.html", context)
 
 def category_products(request, slug):

@@ -74,3 +74,23 @@ def checkout(request):
 def success(request):
     # Sipariş başarılı olunca gösterilecek sayfa.
     return render(request, "orders/success.html")
+
+@login_required
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+
+    context = {
+        "orders": orders,
+    }
+
+    return render(request, "orders/my_orders.html", context)
+
+@login_required
+def order_detail(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+
+    context = {
+        "order": order,
+    }
+
+    return render(request, "orders/order_detail.html", context)
