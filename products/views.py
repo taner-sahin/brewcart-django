@@ -1,69 +1,55 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product, Category
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Category, Review
+from django.contrib import messages
+from django.db.models import Avg
 
 
 def home(request):
     # URL'den arama kelimesini alır.
-    # Örnek: /?q=espresso
     query = request.GET.get("q")
 
     # URL'den sıralama bilgisini alır.
-    # Örnek: /?sort=price_low
     sort = request.GET.get("sort")
 
     # URL'den stok filtresini alır.
-    # Örnek: /?in_stock=1
     in_stock = request.GET.get("in_stock")
 
-    # URL'den minimum fiyatı alır.
-    # Örnek: /?min_price=300
+    # URL'den minimum ve maksimum fiyatı alır.
     min_price = request.GET.get("min_price")
-
-    # URL'den maksimum fiyatı alır.
-    # Örnek: /?max_price=500
     max_price = request.GET.get("max_price")
 
-    # İlk olarak aktif ve öne çıkarılmış ürünleri getirir.
+    # Aktif ve öne çıkarılmış ürünleri getirir.
     featured_products = Product.objects.filter(
         is_available=True,
         is_featured=True
     )
 
-    # Arama varsa ürün adına göre filtreler.
+    # Ürün adına göre arama yapar.
     if query:
-        featured_products = featured_products.filter(
-            name__icontains=query
-        )
+        featured_products = featured_products.filter(name__icontains=query)
 
-    # Stok filtresi varsa stoğu 0'dan büyük ürünleri getirir.
+    # Stoğu 0'dan büyük ürünleri getirir.
     if in_stock:
-        featured_products = featured_products.filter(
-            stock__gt=0
-        )
+        featured_products = featured_products.filter(stock__gt=0)
 
-    # Minimum fiyat girildiyse bu fiyattan büyük/eşit ürünleri getirir.
+    # Minimum fiyat filtresi.
     if min_price:
-        featured_products = featured_products.filter(
-            price__gte=min_price
-        )
+        featured_products = featured_products.filter(price__gte=min_price)
 
-    # Maksimum fiyat girildiyse bu fiyattan küçük/eşit ürünleri getirir.
+    # Maksimum fiyat filtresi.
     if max_price:
-        featured_products = featured_products.filter(
-            price__lte=max_price
-        )
+        featured_products = featured_products.filter(price__lte=max_price)
 
-    # Ürünleri fiyata göre sıralar.
+    # Fiyata göre sıralama.
     if sort == "price_low":
         featured_products = featured_products.order_by("price")
 
     elif sort == "price_high":
         featured_products = featured_products.order_by("-price")
 
-    # Ana sayfadaki kategori kartları için kategorileri getirir.
+    # Ana sayfa kategori kartları.
     categories = Category.objects.all()
 
-    # Python verilerini HTML sayfasına gönderir.
     context = {
         "featured_products": featured_products,
         "categories": categories,
@@ -78,10 +64,10 @@ def home(request):
 
 
 def category_products(request, slug):
-    # Slug'a göre kategoriyi bulur, yoksa 404 verir.
+    # Slug'a göre kategoriyi bulur.
     category = get_object_or_404(Category, slug=slug)
 
-    # Seçilen kategoriye ait aktif ürünleri getirir.
+    # Kategoriye ait aktif ürünleri getirir.
     products = Product.objects.filter(
         category=category,
         is_available=True
@@ -96,15 +82,97 @@ def category_products(request, slug):
 
 
 def product_detail(request, slug):
-    # Slug'a göre aktif ürünü bulur, yoksa 404 verir.
+    # Slug'a göre aktif ürünü bulur.
     product = get_object_or_404(
         Product,
         slug=slug,
         is_available=True
     )
 
+    # Bu ürüne ait yorumları getirir.
+    reviews = product.reviews.all()
+    
+    average_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
+
+    review_count = reviews.count()
+
+    # Yorum formu gönderildiyse çalışır.
+    if request.method == "POST":
+
+        # Sadece giriş yapan kullanıcı yorum yapabilir.
+        if request.user.is_authenticated:
+            rating = request.POST.get("rating")
+            comment = request.POST.get("comment")
+
+            # Kullanıcı bu ürüne daha önce yorum yapmış mı?
+            existing_review = Review.objects.filter(
+                product=product,
+                user=request.user
+            ).exists()
+
+            # Daha önce yorum yaptıysa ikinci yorumu oluşturma.
+            if existing_review:
+                messages.warning(request, "Bu ürüne zaten yorum yaptın.")
+                return redirect("products:product_detail", slug=product.slug)
+
+            # Yeni yorum oluştur.
+            Review.objects.create(
+                product=product,
+                user=request.user,
+                rating=rating,
+                comment=comment,
+            )
+
+            # Yorumu kaydettikten sonra aynı ürün sayfasına dön.
+            return redirect("products:product_detail", slug=product.slug)
+
+        # Giriş yapmamış kullanıcı login sayfasına gider.
+        return redirect("accounts:login")
+
     context = {
         "product": product,
+        "reviews": reviews,
+        "average_rating": average_rating,
+        "review_count": review_count,
     }
 
     return render(request, "products/detail.html", context)
+
+def delete_review(request, review_id):
+    review = get_object_or_404(
+        Review,
+        id=review_id,
+        user=request.user
+    )
+
+    product_slug = review.product.slug
+
+    review.delete()
+
+    return redirect("products:product_detail", slug=product_slug)
+
+def edit_review(request, review_id):
+    # Sadece kendi yorumunu bulabilir.
+    review = get_object_or_404(
+        Review,
+        id=review_id,
+        user=request.user
+    )
+
+    product_slug = review.product.slug
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        comment = request.POST.get("comment")
+
+        review.rating = rating
+        review.comment = comment
+        review.save()
+
+        return redirect("products:product_detail", slug=product_slug)
+
+    context = {
+        "review": review,
+    }
+
+    return render(request, "products/edit_review.html", context)
