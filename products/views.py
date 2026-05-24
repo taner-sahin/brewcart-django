@@ -7,14 +7,23 @@ def home(request):
     # URL'den gelen arama kelimesini alıyoruz.
     #
     # Örnek:
-    #
     # /?q=espresso
     #
-    # Buradaki:
-    #
-    # q = espresso
-    #
     query = request.GET.get("q")
+
+    # URL'den gelen sıralama bilgisini alıyoruz.
+    #
+    # Örnek:
+    # /?sort=price_low
+    #
+    sort = request.GET.get("sort")
+
+    # URL'den gelen stok filtresini alıyoruz.
+    #
+    # Örnek:
+    # /?in_stock=1
+    #
+    in_stock = request.GET.get("in_stock")
 
     # İlk başta:
     #
@@ -34,6 +43,27 @@ def home(request):
             name__icontains=query
         )
 
+    # Eğer kullanıcı sadece stokta olan ürünleri görmek isterse:
+    #
+    # stock > 0 olan ürünleri getir.
+    #
+    if in_stock:
+        featured_products = featured_products.filter(stock__gt=0)
+
+    # Sıralama sistemi
+    #
+    # price_low:
+    # ucuzdan pahalıya
+    #
+    # price_high:
+    # pahalıdan ucuza
+    #
+    if sort == "price_low":
+        featured_products = featured_products.order_by("price")
+
+    elif sort == "price_high":
+        featured_products = featured_products.order_by("-price")
+
     # Bütün kategorileri getiriyoruz.
     categories = Category.objects.all()
 
@@ -42,6 +72,8 @@ def home(request):
         "featured_products": featured_products,
         "categories": categories,
         "query": query,
+        "sort": sort,
+        "in_stock": in_stock,
     }
 
     # home.html sayfasını render ediyoruz.
