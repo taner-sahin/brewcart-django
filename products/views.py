@@ -1,53 +1,50 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Category, Review
 from django.contrib import messages
-from django.db.models import Avg
+from django.db.models import Avg, Q
+
+from .models import Product, Category, Review
 
 
 def home(request):
-    # URL'den arama kelimesini alır.
     query = request.GET.get("q")
-
-    # URL'den sıralama bilgisini alır.
     sort = request.GET.get("sort")
-
-    # URL'den stok filtresini alır.
     in_stock = request.GET.get("in_stock")
-
-    # URL'den minimum ve maksimum fiyatı alır.
     min_price = request.GET.get("min_price")
     max_price = request.GET.get("max_price")
 
-    # Aktif ve öne çıkarılmış ürünleri getirir.
-    featured_products = Product.objects.filter(
-        is_available=True,
-        is_featured=True
-    )
+    # Arama veya filtre varsa tüm aktif ürünlerde ara.
+    # Hiç filtre yoksa sadece featured ürünleri ana sayfada göster.
+    if query or sort or in_stock or min_price or max_price:
+        featured_products = Product.objects.filter(is_available=True)
+    else:
+        featured_products = Product.objects.filter(
+            is_available=True,
+            is_featured=True
+        )
 
-    # Ürün adına göre arama yapar.
+    # Search: ürün adı + açıklama + kategori adı içinde arar.
     if query:
-        featured_products = featured_products.filter(name__icontains=query)
+        featured_products = featured_products.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        )
 
-    # Stoğu 0'dan büyük ürünleri getirir.
     if in_stock:
         featured_products = featured_products.filter(stock__gt=0)
 
-    # Minimum fiyat filtresi.
     if min_price:
         featured_products = featured_products.filter(price__gte=min_price)
 
-    # Maksimum fiyat filtresi.
     if max_price:
         featured_products = featured_products.filter(price__lte=max_price)
 
-    # Fiyata göre sıralama.
     if sort == "price_low":
         featured_products = featured_products.order_by("price")
 
     elif sort == "price_high":
         featured_products = featured_products.order_by("-price")
 
-    # Ana sayfa kategori kartları.
     categories = Category.objects.all()
 
     context = {
@@ -64,10 +61,8 @@ def home(request):
 
 
 def category_products(request, slug):
-    # Slug'a göre kategoriyi bulur.
     category = get_object_or_404(Category, slug=slug)
 
-    # Kategoriye ait aktif ürünleri getirir.
     products = Product.objects.filter(
         category=category,
         is_available=True
@@ -82,40 +77,31 @@ def category_products(request, slug):
 
 
 def product_detail(request, slug):
-    # Slug'a göre aktif ürünü bulur.
     product = get_object_or_404(
         Product,
         slug=slug,
         is_available=True
     )
 
-    # Bu ürüne ait yorumları getirir.
     reviews = product.reviews.all()
-    
     average_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
-
     review_count = reviews.count()
 
-    # Yorum formu gönderildiyse çalışır.
     if request.method == "POST":
 
-        # Sadece giriş yapan kullanıcı yorum yapabilir.
         if request.user.is_authenticated:
             rating = request.POST.get("rating")
             comment = request.POST.get("comment")
 
-            # Kullanıcı bu ürüne daha önce yorum yapmış mı?
             existing_review = Review.objects.filter(
                 product=product,
                 user=request.user
             ).exists()
 
-            # Daha önce yorum yaptıysa ikinci yorumu oluşturma.
             if existing_review:
                 messages.warning(request, "Bu ürüne zaten yorum yaptın.")
                 return redirect("products:product_detail", slug=product.slug)
 
-            # Yeni yorum oluştur.
             Review.objects.create(
                 product=product,
                 user=request.user,
@@ -123,10 +109,8 @@ def product_detail(request, slug):
                 comment=comment,
             )
 
-            # Yorumu kaydettikten sonra aynı ürün sayfasına dön.
             return redirect("products:product_detail", slug=product.slug)
 
-        # Giriş yapmamış kullanıcı login sayfasına gider.
         return redirect("accounts:login")
 
     context = {
@@ -138,6 +122,7 @@ def product_detail(request, slug):
 
     return render(request, "products/detail.html", context)
 
+
 def delete_review(request, review_id):
     review = get_object_or_404(
         Review,
@@ -146,13 +131,12 @@ def delete_review(request, review_id):
     )
 
     product_slug = review.product.slug
-
     review.delete()
 
     return redirect("products:product_detail", slug=product_slug)
 
+
 def edit_review(request, review_id):
-    # Sadece kendi yorumunu bulabilir.
     review = get_object_or_404(
         Review,
         id=review_id,

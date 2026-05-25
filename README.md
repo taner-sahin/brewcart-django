@@ -1,36 +1,86 @@
 # ☕ BrewCart
 
-BrewCart is a backend-focused Django specialty coffee e-commerce project built to simulate real-world backend systems using a scalable and repeatable architecture.
+BrewCart is a backend-focused Django specialty coffee e-commerce project built to simulate real-world backend systems using scalable and reusable backend architecture.
 
-The project focuses heavily on advanced product filtering, queryset logic, search systems, user-based cart architecture, and professional Django backend workflows rather than frontend complexity.
+The project focuses heavily on advanced queryset filtering, search systems, database-driven cart architecture, order workflows, review systems, and professional Django backend development rather than frontend complexity.
 
 ---
 
 # 🖼️ Project Preview
 
 ## 🏠 Home Page
-Minimal specialty coffee storefront with dynamic navbar and featured products.
+Minimal specialty coffee storefront with:
+- dynamic navbar
+- featured products
+- category filtering
+- responsive Bootstrap layout
+
+---
 
 ## 🔎 Advanced Search & Filtering
-Search products by:
+
+Users can dynamically filter products by:
+
 - keyword
 - category
 - minimum price
 - maximum price
 - stock availability
-- ordering options
+- sorting options
+
+Search system supports:
+- product name search
+- description search
+- category name search
+- Q object query logic
+
+---
 
 ## ⭐ Review & Rating System
-Users can:
+
+Authenticated users can:
+
 - write reviews
+- edit reviews
+- delete reviews
 - give 1–5 star ratings
-- view average rating per product
+
+Backend logic includes:
+- Avg() aggregation
+- review count
+- dynamic rating calculations
+- user review protection
+
+---
 
 ## 🛒 Database-Based Cart System
-Dynamic cart system fully powered by database logic.
+
+Dynamic cart system fully powered by database architecture.
+
+Features:
+- add to cart
+- increase quantity
+- decrease quantity
+- remove items
+- navbar cart count
+- user-specific cart storage
+
+NOT session-based.
+
+---
 
 ## 📦 Checkout & Order Flow
-Real-world order workflow with user-based order management.
+
+Real-world order workflow implementation:
+
+- checkout form
+- order creation
+- OrderItem snapshot logic
+- automatic cart cleanup
+- stock reduction
+- order history
+- order detail pages
+- admin order management
 
 ---
 
@@ -38,11 +88,11 @@ Real-world order workflow with user-based order management.
 
 This project is part of a structured Django backend development journey.
 
-Each project in this series follows the same architecture while introducing one major backend feature.
+Each project in this series follows the same architecture while introducing one major backend concept.
 
-🎯 Focus of this project:
+🎯 Main focus of BrewCart:
 
-Building advanced queryset, filtering, search, and rating systems using Django ORM and database-driven architecture.
+Building advanced filtering, search systems, queryset logic, review architecture, and scalable backend workflows using Django ORM.
 
 ---
 
@@ -58,34 +108,34 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 ---
 
 ## 🛍 Product System
-- Product listing
+- Dynamic product listing
 - Slug-based product detail pages
 - Category filtering
 - Dynamic category navbar
 - Featured products section
+- Product availability system
 
 ---
 
 ## 🔎 Advanced Search & Filtering (Main Feature)
 
 ### Query Features
-- Search by product name
-- Search using request.GET
-- Multi-filter support
+- request.GET architecture
 - Dynamic queryset filtering
 - Q object search logic
+- Multi-field search system
+- Search by category name
+- Search by description
 
 ### Filter Features
 - Category filtering
 - Price min / max filtering
 - In-stock filtering
-- Ordering system
+- Sorting system
 
 ### Ordering Options
 - Price low → high
 - Price high → low
-- Newest products
-- Product name ordering
 
 ---
 
@@ -93,6 +143,8 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 
 ### User Features
 - Add review
+- Edit review
+- Delete review
 - Give 1–5 star rating
 - Product review listing
 
@@ -100,8 +152,8 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 - ForeignKey relationships
 - related_name usage
 - Avg() aggregation
-- Count() aggregation
 - Dynamic rating calculation
+- One review per user protection
 
 ---
 
@@ -109,8 +161,8 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 - Add products to cart
 - Increase / decrease quantity
 - Remove cart items
-- User-specific cart storage
 - Dynamic navbar cart count
+- User-specific cart storage
 - Database-driven architecture
 - NOT session-based
 
@@ -121,6 +173,7 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 - Order creation
 - OrderItem snapshot logic
 - Automatic cart cleanup
+- Stock reduction
 - My Orders page
 - Order detail page
 - Admin order management
@@ -134,7 +187,7 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 - Q object implementation
 - request.GET architecture
 - Aggregate functions
-- Avg() and Count() usage
+- Avg() usage
 - Database-driven cart system
 - Snapshot order logic
 - Slug-based clean URLs
@@ -146,17 +199,18 @@ Building advanced queryset, filtering, search, and rating systems using Django O
 
 # 🔄 Business Flow
 
-User registers
-→ Logs in
-→ Searches products
-→ Filters products dynamically
-→ Opens product detail page
-→ Adds products to cart
-→ Cart stored in database
-→ Checkout process starts
-→ Order is created
-→ OrderItems generated
-→ Cart cleared automatically
+User registers  
+→ Logs in  
+→ Searches products  
+→ Filters products dynamically  
+→ Opens product detail page  
+→ Adds products to cart  
+→ Cart stored in database  
+→ Checkout process starts  
+→ Order is created  
+→ OrderItems generated  
+→ Stock reduced automatically  
+→ Cart cleared automatically  
 → User tracks orders from My Orders page
 
 ---
@@ -166,7 +220,7 @@ User registers
 - Python
 - Django
 - SQLite
-- Bootstrap
+- Bootstrap 5
 
 ---
 
@@ -199,23 +253,27 @@ media → uploaded product images
 
 # 📊 Status
 
-🚧 Backend Development In Progress
+✅ Backend Systems Completed
 
-### Completed Systems
+### Completed Features
 - Authentication System
-- Hero Banner
-- Static Homepage
-- Dynamic Navbar Structure
-- AI-Generated Product Images
-- GitHub Showcase Design
+- Dynamic Product System
+- Slug-Based URLs
+- Advanced Search & Filtering
+- Q Object Search Logic
+- Database-Based Cart
+- Stock Guard System
+- Checkout & Order Workflow
+- Review & Rating System
+- Dynamic Navbar
+- User Order History
+- Admin Order Management
+- Bootstrap UI Polish
+- GitHub Showcase Structure
 
-### Active Development
-- Product Models
-- Category System
-- Filtering System
-- Query Logic
-- Cart Architecture
-- Review System
+### Next Step
+- Production Deployment
+- Live Demo Release
 
 ---
 
@@ -234,5 +292,5 @@ Project 6 → BrewCart 🚧
 
 Taner Sahin
 
-GitHub:
+GitHub:  
 https://github.com/taner-sahin

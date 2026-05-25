@@ -20,15 +20,15 @@
             </p>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             {% for category in categories %}
 
-                <div class="col-md-3 mb-4">
+                <div class="col-12 col-sm-6 col-md-3">
                     <a
                         href="{% url 'products:category_products' category.slug %}"
                         class="text-decoration-none text-dark"
                     >
-                        <div class="card h-100">
+                        <div class="card h-100 shadow-sm border-0 product-card">
                             {% if category.image %}
                                 <img
                                     src="{{ category.image.url }}"
@@ -38,7 +38,9 @@
                             {% endif %}
 
                             <div class="card-body text-center">
-                                <h5 class="card-title">{{ category.name }}</h5>
+                                <h5 class="card-title mb-0">
+                                    {{ category.name }}
+                                </h5>
                             </div>
                         </div>
                     </a>
@@ -60,82 +62,16 @@
 
 
 <!-- FILTER FORM -->
-<section class="filter-section mb-4">
+<section class="filter-section py-4">
     <div class="container">
 
-       <form
-    method="GET"
-    action="{% url 'products:home' %}"
-    class="row g-2 justify-content-center"
->
-
-    <div class="col-md-3">
-        <input
-            type="text"
-            name="q"
-            class="form-control"
-            placeholder="Search coffee..."
-            value="{{ query|default:'' }}"
-        >
-    </div>
-
-    <div class="col-md-2">
-        <input
-            type="number"
-            name="min_price"
-            class="form-control"
-            placeholder="Min Price"
-            value="{{ min_price|default:'' }}"
-        >
-    </div>
-
-    <div class="col-md-2">
-        <input
-            type="number"
-            name="max_price"
-            class="form-control"
-            placeholder="Max Price"
-            value="{{ max_price|default:'' }}"
-        >
-    </div>
-
-    <div class="col-md-2">
-        <select name="sort" class="form-select">
-            <option value="">Sort</option>
-
-            <option value="price_low" {% if sort == "price_low" %}selected{% endif %}>
-                Low to High
-            </option>
-
-            <option value="price_high" {% if sort == "price_high" %}selected{% endif %}>
-                High to Low
-            </option>
-        </select>
-    </div>
-
-    <div class="col-md-1 d-flex align-items-center">
-        <input
-            type="checkbox"
-            name="in_stock"
-            value="1"
-            class="form-check-input me-2"
-            {% if in_stock %}checked{% endif %}
+        <form
+            method="GET"
+            action="{% url 'products:home' %}"
+            class="row g-3 align-items-center justify-content-center"
         >
 
-        <label class="form-check-label">
-            Stock
-        </label>
-    </div>
-
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-dark w-100">
-            Filter
-        </button>
-    </div>
-
-</form>
-
-            <div class="col-md-4">
+            <div class="col-12 col-md-3">
                 <input
                     type="text"
                     name="q"
@@ -145,7 +81,27 @@
                 >
             </div>
 
-            <div class="col-md-3">
+            <div class="col-6 col-md-2">
+                <input
+                    type="number"
+                    name="min_price"
+                    class="form-control"
+                    placeholder="Min Price"
+                    value="{{ min_price|default:'' }}"
+                >
+            </div>
+
+            <div class="col-6 col-md-2">
+                <input
+                    type="number"
+                    name="max_price"
+                    class="form-control"
+                    placeholder="Max Price"
+                    value="{{ max_price|default:'' }}"
+                >
+            </div>
+
+            <div class="col-12 col-md-2">
                 <select name="sort" class="form-select">
                     <option value="">Sort Products</option>
 
@@ -159,7 +115,7 @@
                 </select>
             </div>
 
-            <div class="col-md-2 d-flex align-items-center">
+            <div class="col-12 col-md-1 d-flex align-items-center justify-content-md-center">
                 <input
                     type="checkbox"
                     name="in_stock"
@@ -169,11 +125,11 @@
                 >
 
                 <label class="form-check-label">
-                    In Stock
+                    Stock
                 </label>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-12 col-md-2">
                 <button type="submit" class="btn btn-dark w-100">
                     Filter
                 </button>
@@ -196,15 +152,15 @@
             </p>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
             {% for product in featured_products %}
 
-                <div class="col-md-3 mb-4">
+                <div class="col-12 col-sm-6 col-md-3">
                     <a
                         href="{% url 'products:product_detail' product.slug %}"
                         class="text-decoration-none text-dark"
                     >
-                        <div class="card h-100">
+                        <div class="card h-100 shadow-sm border-0 product-card">
 
                             {% if product.image %}
                                 <img
@@ -214,14 +170,16 @@
                                 >
                             {% endif %}
 
-                            <div class="card-body">
-                                <h5 class="card-title">{{ product.name }}</h5>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    {{ product.name }}
+                                </h5>
 
-                                <p class="card-text">
+                                <p class="card-text text-muted">
                                     {{ product.description|truncatewords:12 }}
                                 </p>
 
-                                <p class="fw-bold">
+                                <p class="fw-bold mt-auto mb-0">
                                     {{ product.price }} ₺
                                 </p>
                             </div>

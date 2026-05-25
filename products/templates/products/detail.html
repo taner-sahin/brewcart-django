@@ -4,69 +4,104 @@
 
 <section class="product-detail py-5">
   <div class="container">
-    <div class="row align-items-center">
 
-      <div class="col-md-6 mb-4">
-        {% if product.image %}
-          <img
-            src="{{ product.image.url }}"
-            class="img-fluid rounded"
-            alt="{{ product.name }}"
-          >
-        {% endif %}
+    <div class="row g-5 align-items-center">
+
+      <!-- PRODUCT IMAGE -->
+      <div class="col-md-6">
+        <div class="bg-white border rounded-4 shadow-sm p-3">
+          {% if product.image %}
+            <img
+              src="{{ product.image.url }}"
+              class="img-fluid rounded-4 w-100"
+              alt="{{ product.name }}"
+            >
+          {% endif %}
+        </div>
       </div>
 
+      <!-- PRODUCT INFO -->
       <div class="col-md-6">
-        <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+        <span class="badge bg-warning text-dark mb-3">
+          {{ product.category.name }}
+        </span>
 
-        <p class="text-muted">Category: {{ product.category.name }}</p>
+        <h1 class="fw-bold mb-3">
+          {{ product.name }}
+        </h1>
 
-        <p class="mb-4">{{ product.description }}</p>
+        <p class="text-muted fs-5 mb-4">
+          {{ product.description }}
+        </p>
 
-        <h3 class="fw-bold mb-3">{{ product.price }} ₺</h3>
-
-        <div class="mb-3">
+        <!-- RATING SUMMARY -->
+        <div class="mb-4">
           {% if review_count > 0 %}
-            <p class="fw-semibold mb-1">
-              {% if average_rating|floatformat:0 == "5" %}
-                ★★★★★
-              {% elif average_rating|floatformat:0 == "4" %}
-                ★★★★☆
-              {% elif average_rating|floatformat:0 == "3" %}
-                ★★★☆☆
-              {% elif average_rating|floatformat:0 == "2" %}
-                ★★☆☆☆
-              {% elif average_rating|floatformat:0 == "1" %}
-                ★☆☆☆☆
-              {% else %}
-                ☆☆☆☆☆
-              {% endif %}
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-warning fs-4">
+                {% if average_rating|floatformat:0 == "5" %}
+                  ★★★★★
+                {% elif average_rating|floatformat:0 == "4" %}
+                  ★★★★☆
+                {% elif average_rating|floatformat:0 == "3" %}
+                  ★★★☆☆
+                {% elif average_rating|floatformat:0 == "2" %}
+                  ★★☆☆☆
+                {% elif average_rating|floatformat:0 == "1" %}
+                  ★☆☆☆☆
+                {% else %}
+                  ☆☆☆☆☆
+                {% endif %}
+              </span>
 
-              {{ average_rating|floatformat:1 }} / 5
-            </p>
+              <span class="fw-semibold">
+                {{ average_rating|floatformat:1 }} / 5
+              </span>
+            </div>
 
-            <p class="text-muted">Total Reviews: {{ review_count }}</p>
+            <small class="text-muted">
+              {{ review_count }} customer review
+            </small>
           {% else %}
-            <p class="text-muted">No ratings yet.</p>
+            <p class="text-muted mb-0">
+              No ratings yet.
+            </p>
           {% endif %}
         </div>
 
-        <p>Stock: {{ product.stock }}</p>
+        <!-- PRICE -->
+        <h2 class="fw-bold mb-3">
+          {{ product.price }} ₺
+        </h2>
 
+        <!-- STOCK -->
+        <div class="mb-4">
+          <p class="mb-1">
+            <strong>Stock:</strong> {{ product.stock }}
+          </p>
+
+          {% if product.stock > 0 and product.is_available %}
+            <p class="text-success fw-bold mb-0">
+              In Stock
+            </p>
+          {% else %}
+            <p class="text-danger fw-bold mb-0">
+              Out of Stock
+            </p>
+          {% endif %}
+        </div>
+
+        <!-- CART BUTTON -->
         {% if product.stock > 0 and product.is_available %}
-          <p class="text-success fw-bold">In Stock</p>
-
-          <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-dark">
-            Add to Cart - Sepete Ekle
+          <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-dark btn-lg px-4">
+            Add to Cart
           </a>
         {% else %}
-          <p class="text-danger fw-bold">Out of Stock</p>
-
-          <button class="btn btn-secondary" disabled>
+          <button class="btn btn-secondary btn-lg px-4" disabled>
             Out of Stock
           </button>
 
-          <p class="text-danger mt-2">
+          <p class="text-danger mt-3">
             This product is currently out of stock.
           </p>
         {% endif %}
@@ -76,92 +111,134 @@
   </div>
 </section>
 
-<hr>
 
-<h3>Write a Review</h3>
+<!-- REVIEW AREA -->
+<section class="reviews-section py-5 bg-light">
+  <div class="container">
 
-{% if user.is_authenticated %}
-  <form method="POST">
-    {% csrf_token %}
+    <div class="row g-4">
 
-    <div class="mb-3">
-      <label class="form-label">Rating</label>
+      <!-- WRITE REVIEW -->
+      <div class="col-md-5">
+        <div class="bg-white border rounded-4 shadow-sm p-4">
+          <h3 class="fw-bold mb-3">
+            Write a Review
+          </h3>
 
-      <select name="rating" class="form-select" required>
-        <option value="">Select Rating</option>
-        <option value="1">1 Star</option>
-        <option value="2">2 Stars</option>
-        <option value="3">3 Stars</option>
-        <option value="4">4 Stars</option>
-        <option value="5">5 Stars</option>
-      </select>
-    </div>
+          {% if user.is_authenticated %}
+            <form method="POST">
+              {% csrf_token %}
 
-    <div class="mb-3">
-      <label class="form-label">Comment</label>
+              <div class="mb-3">
+                <label class="form-label">Rating</label>
 
-      <textarea
-        name="comment"
-        class="form-control"
-        rows="4"
-        required
-      ></textarea>
-    </div>
+                <select name="rating" class="form-select" required>
+                  <option value="">Select Rating</option>
+                  <option value="1">1 Star</option>
+                  <option value="2">2 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="5">5 Stars</option>
+                </select>
+              </div>
 
-    <button type="submit" class="btn btn-dark">
-      Submit Review
-    </button>
-  </form>
-{% else %}
-  <p>
-    Yorum yapmak için giriş yapmalısın.
-    <a href="{% url 'accounts:login' %}">Giriş yap</a>
-  </p>
-{% endif %}
+              <div class="mb-3">
+                <label class="form-label">Comment</label>
 
-<hr>
+                <textarea
+                  name="comment"
+                  class="form-control"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
 
-<h3>Reviews</h3>
+              <button type="submit" class="btn btn-dark w-100">
+                Submit Review
+              </button>
+            </form>
+          {% else %}
+            <p class="text-muted">
+              Yorum yapmak için giriş yapmalısın.
+            </p>
 
-{% if reviews %}
-  {% for review in reviews %}
-    <div class="border rounded p-3 mb-3">
-      <p class="mb-1">
-        <strong>User:</strong> {{ review.user.username }}
-      </p>
-
-      <p class="mb-1">
-        <strong>Rating:</strong> {{ review.rating }}/5
-      </p>
-
-      <p class="mb-1">
-        <strong>Comment:</strong> {{ review.comment }}
-      </p>
-
-      <small class="text-muted">
-        {{ review.created_at }}
-      </small>
-
-      {% if review.user.id == user.id %}
-        <div class="mt-2">
-          <a
-            href="{% url 'products:delete_review' review.id %}"
-            class="btn btn-sm btn-outline-danger"
-          >
-            Delete Review
-          </a>
-          <a
-  href="{% url 'products:edit_review' review.id %}"
-  class="btn btn-sm btn-outline-primary"
->
-  Edit Review
-</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">
+              Giriş yap
+            </a>
+          {% endif %}
         </div>
-      {% endif %}
+      </div>
+
+      <!-- REVIEW LIST -->
+      <div class="col-md-7">
+        <h3 class="fw-bold mb-3">
+          Customer Reviews
+        </h3>
+
+        {% if reviews %}
+          {% for review in reviews %}
+            <div class="bg-white border rounded-4 shadow-sm p-4 mb-3">
+
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="fw-bold mb-1">
+                    {{ review.user.username }}
+                  </h5>
+
+                  <p class="text-warning mb-2">
+                    {% if review.rating == 5 %}
+                      ★★★★★
+                    {% elif review.rating == 4 %}
+                      ★★★★☆
+                    {% elif review.rating == 3 %}
+                      ★★★☆☆
+                    {% elif review.rating == 2 %}
+                      ★★☆☆☆
+                    {% elif review.rating == 1 %}
+                      ★☆☆☆☆
+                    {% endif %}
+                  </p>
+                </div>
+
+                <small class="text-muted">
+                  {{ review.created_at }}
+                </small>
+              </div>
+
+              <p class="mb-3">
+                {{ review.comment }}
+              </p>
+
+              {% if review.user.id == user.id %}
+                <div class="d-flex gap-2">
+                  <a
+                    href="{% url 'products:edit_review' review.id %}"
+                    class="btn btn-sm btn-outline-primary"
+                  >
+                    Edit Review
+                  </a>
+
+                  <a
+                    href="{% url 'products:delete_review' review.id %}"
+                    class="btn btn-sm btn-outline-danger"
+                  >
+                    Delete Review
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="bg-white border rounded-4 shadow-sm p-4">
+            <p class="text-muted mb-0">
+              No reviews yet.
+            </p>
+          </div>
+        {% endif %}
+      </div>
+
     </div>
-  {% endfor %}
-{% else %}
-  <p>No reviews yet.</p>
-{% endif %}
+  </div>
+</section>
 
 {% endblock %}

@@ -3,13 +3,32 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
-# RegisterForm, Django'nun hazır UserCreationForm yapısını genişletir.
-# Biz ekstra olarak email alanı ekliyoruz.
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
         model = User
-
-        # Bu alanlar formda görünecek.
         fields = ["username", "email", "password1", "password2"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["username"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Kullanıcı adı",
+        })
+
+        self.fields["email"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Email adresi",
+        })
+
+        self.fields["password1"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Şifre",
+        })
+
+        self.fields["password2"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Şifre tekrar",
+        })
