@@ -4,4 +4,4 @@ db.sqlite3
 .env
 venv/
 media/
-staticfiles/git add .
+staticfiles/
