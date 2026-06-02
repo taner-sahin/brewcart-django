@@ -2,28 +2,103 @@
 
 {% block content %}
 
-<h2>Order Detail</h2>
+<div class="container my-5">
 
-<h4>Order #{{ order.id }}</h4>
-
-<p><strong>Status:</strong> {{ order.status }}</p>
-<p><strong>Total:</strong> {{ order.total_price }} ₺</p>
-<p><strong>Date:</strong> {{ order.created_at }}</p>
-
-<hr>
-
-<h3>Products</h3>
-
-{% for item in order.items.all %}
-    <div>
-        <p><strong>Product:</strong> {{ item.product_name }}</p>
-        <p><strong>Price:</strong> {{ item.product_price }} ₺</p>
-        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-        <p><strong>Subtotal:</strong> {{ item.subtotal }} ₺</p>
+    <div class="mb-4">
+        <h2 class="fw-bold">Order Detail</h2>
+        <p class="text-muted">
+            Order #{{ order.id }}
+        </p>
     </div>
-    <hr>
-{% endfor %}
 
-<a href="{% url 'orders:my_orders' %}">Back to My Orders</a>
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-muted">Status</h6>
+
+                    <span class="badge bg-warning text-dark fs-6">
+                        {{ order.status }}
+                    </span>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-muted">Total Price</h6>
+
+                    <p class="fw-bold mb-0">
+                        {{ order.total_price }} ₺
+                    </p>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <h6 class="text-muted">Date</h6>
+
+                    <p class="mb-0">
+                        {{ order.created_at }}
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <h4 class="fw-bold mb-3">Products</h4>
+
+    {% for item in order.items.all %}
+
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-3">
+                        <h6 class="text-muted">Product</h6>
+
+                        <p class="fw-bold mb-0">
+                            {{ item.product_name }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h6 class="text-muted">Price</h6>
+
+                        <p class="mb-0">
+                            {{ item.product_price }} ₺
+                        </p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h6 class="text-muted">Quantity</h6>
+
+                        <p class="mb-0">
+                            {{ item.quantity }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <h6 class="text-muted">Subtotal</h6>
+
+                        <p class="fw-bold mb-0">
+                            {{ item.subtotal }} ₺
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+    <div class="mt-4">
+        <a href="{% url 'orders:my_orders' %}" class="btn btn-outline-dark">
+            ← Back to My Orders
+        </a>
+    </div>
+
+</div>
 
 {% endblock %}

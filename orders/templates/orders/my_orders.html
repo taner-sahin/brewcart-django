@@ -1,19 +1,62 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-<h2>My Orders</h2>
+{% block content %}
+<div class="container my-5">
 
-{% if orders %} {% for order in orders %}
-<div>
-  <h4>
-    <a href="{% url 'orders:order_detail' order.id %}">
-      Order #{{ order.id }}
-    </a>
-  </h4>
-  <p>Total: {{ order.total_price }}</p>
-  <p>Status: {{ order.status }}</p>
-  <p>Date: {{ order.created_at }}</p>
+  <div class="mb-4 text-center">
+    <h2 class="fw-bold">My Orders</h2>
+    <p class="text-muted">View your previous BrewCart orders.</p>
+  </div>
+
+  {% if orders %}
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+
+        {% for order in orders %}
+          <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+
+              <div>
+                <h5 class="fw-bold mb-2">
+                  Order #{{ order.id }}
+                </h5>
+
+                <p class="mb-1">
+                  <strong>Total:</strong> {{ order.total_price }} ₺
+                </p>
+
+                <p class="mb-1">
+                  <strong>Status:</strong>
+                  <span class="badge bg-warning text-dark">
+                    {{ order.status }}
+                  </span>
+                </p>
+
+                <p class="mb-0 text-muted">
+                  <strong>Date:</strong> {{ order.created_at }}
+                </p>
+              </div>
+
+              <div class="mt-3 mt-md-0">
+                <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-dark">
+                  View Details
+                </a>
+              </div>
+
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <h5 class="text-muted">You have no orders yet.</h5>
+      <a href="{% url 'products:home' %}" class="btn btn-dark mt-3">
+        Start Shopping
+      </a>
+    </div>
+  {% endif %}
+
 </div>
-<hr />
-{% endfor %} {% else %}
-<p>You have no orders yet.</p>
-{% endif %} {% endblock %}
+{% endblock %}
