@@ -1,96 +1,78 @@
 # ☕ BrewCart
 
-BrewCart is a backend-focused Django specialty coffee e-commerce project built to simulate real-world backend systems using scalable and reusable backend architecture.
+Backend-focused Django specialty coffee e-commerce project built with scalable backend architecture, advanced queryset filtering, dynamic search systems, review workflows, and database-driven cart logic.
 
-The project focuses heavily on advanced queryset filtering, search systems, database-driven cart architecture, order workflows, review systems, and professional Django backend development rather than frontend complexity.
+## 🌐 Live Demo
+
+[BrewCart Live Website](https://brewcart-django.onrender.com)
 
 ---
 
-# 🖼️ Project Preview
+# 🖼️ Screenshots
 
 ## 🏠 Home Page
-Minimal specialty coffee storefront with:
-- dynamic navbar
-- featured products
-- category filtering
-- responsive Bootstrap layout
+![Home Page](screenshots/home-page.png)
 
 ---
 
-## 🔎 Advanced Search & Filtering
-
-Users can dynamically filter products by:
-
-- keyword
-- category
-- minimum price
-- maximum price
-- stock availability
-- sorting options
-
-Search system supports:
-- product name search
-- description search
-- category name search
-- Q object query logic
+## 🗂 Category System
+![Category Page](screenshots/category-page.png)
 
 ---
 
-## ⭐ Review & Rating System
-
-Authenticated users can:
-
-- write reviews
-- edit reviews
-- delete reviews
-- give 1–5 star ratings
-
-Backend logic includes:
-- Avg() aggregation
-- review count
-- dynamic rating calculations
-- user review protection
+## 📄 Product Detail
+![Product Detail](screenshots/product-detail.png)
 
 ---
 
-## 🛒 Database-Based Cart System
-
-Dynamic cart system fully powered by database architecture.
-
-Features:
-- add to cart
-- increase quantity
-- decrease quantity
-- remove items
-- navbar cart count
-- user-specific cart storage
-
-NOT session-based.
+## 🛒 Cart System
+![Cart Page](screenshots/cart-page.png)
 
 ---
 
-## 📦 Checkout & Order Flow
+## 📦 Checkout System
+![Checkout Page](screenshots/checkout-page.png)
 
-Real-world order workflow implementation:
+---
 
-- checkout form
-- order creation
-- OrderItem snapshot logic
-- automatic cart cleanup
-- stock reduction
-- order history
-- order detail pages
-- admin order management
+## 📋 My Orders
+![My Orders](screenshots/my-orders.png)
+
+---
+
+## 📄 Order Detail
+![Order Detail](screenshots/order-detail.png)
+
+---
+
+## ⚙️ Admin Product Management
+![Admin Products](screenshots/admin-products.png)
+
+---
+
+## 📦 Admin Order Management
+![Admin Orders](screenshots/admin-orders.png)
 
 ---
 
 # 🧠 About
 
-This project is part of a structured Django backend development journey.
+BrewCart is a backend-focused Django specialty coffee e-commerce project built to simulate real-world backend systems using scalable and reusable backend architecture.
 
-Each project in this series follows the same architecture while introducing one major backend concept.
+The project focuses heavily on:
 
-🎯 Main focus of BrewCart:
+- advanced queryset filtering
+- search systems
+- database-driven cart architecture
+- order workflows
+- review systems
+- scalable backend development
+
+rather than frontend complexity.
+
+---
+
+# 🎯 Main Focus
 
 Building advanced filtering, search systems, queryset logic, review architecture, and scalable backend workflows using Django ORM.
 
@@ -117,7 +99,7 @@ Building advanced filtering, search systems, queryset logic, review architecture
 
 ---
 
-## 🔎 Advanced Search & Filtering (Main Feature)
+## 🔎 Advanced Search & Filtering
 
 ### Query Features
 - request.GET architecture
@@ -221,6 +203,9 @@ User registers
 - Django
 - SQLite
 - Bootstrap 5
+- WhiteNoise
+- Gunicorn
+- Render
 
 ---
 
@@ -248,6 +233,7 @@ media → uploaded product images
 - Creating database-driven cart architecture
 - Managing user-based order workflows
 - Building reusable backend architecture
+- Deploying Django projects to production
 
 ---
 
@@ -271,9 +257,34 @@ media → uploaded product images
 - Bootstrap UI Polish
 - GitHub Showcase Structure
 
-### Next Step
-- Production Deployment
-- Live Demo Release
+---
+
+# 🚀 Live Deployment
+
+BrewCart is fully deployed on Render.
+
+Production topics implemented:
+
+- Gunicorn
+- WhiteNoise
+- Static files management
+- Production settings
+- Environment variables
+- DEBUG=False deployment workflow
+
+---
+
+# 💡 Project Philosophy
+
+This project was built with a backend-first mindset.
+
+The primary goal was not visual complexity, but:
+
+- scalable backend architecture
+- reusable Django systems
+- real-world e-commerce workflows
+- clean backend logic
+- professional project structure
 
 ---
 
@@ -284,7 +295,8 @@ Project 2 → OrderCore ✅
 Project 3 → StockFlow ✅  
 Project 4 → CouponCart ✅  
 Project 5 → VariShop ✅  
-Project 6 → BrewCart 🚧  
+Project 6 → BrewCart ✅  
+Project 7 → SaveBasket 🔜
 
 ---
 
